@@ -1,0 +1,10 @@
+{
+  "case_id": "case3_removed_null_check",
+  "has_contract_break": true,
+  "expected_affected_functions": [
+    "handle_request",
+    "parse_header_length"
+  ],
+  "minimum_severity": "high",
+  "notes": "Removed nullptr guard causing segmentation fault when caller passes null"
+}

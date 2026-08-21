@@ -1,0 +1,9 @@
+--- a/src/parser.cpp
++++ b/src/parser.cpp
+@@ -3,4 +3,2 @@
+ int parse_header_length(const char* buffer) {
+-    if (!buffer) {
+-        return -1;
+-    }
+     return (int)buffer[0];
+ }

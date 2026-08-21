@@ -1,0 +1,10 @@
+{
+  "case_id": "case8_buffer_off_by_one",
+  "has_contract_break": true,
+  "expected_affected_functions": [
+    "serialize_packet",
+    "copy_bytes"
+  ],
+  "minimum_severity": "high",
+  "notes": "Off-by-one boundary error in copy loop writes past allocated caller buffer"
+}

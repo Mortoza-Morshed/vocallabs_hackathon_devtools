@@ -1,0 +1,7 @@
+{
+  "case_id": "case6_safe_internal_refactor",
+  "has_contract_break": false,
+  "expected_affected_functions": [],
+  "minimum_severity": "low",
+  "notes": "Safe refactor simplifying math expression without semantic changes"
+}

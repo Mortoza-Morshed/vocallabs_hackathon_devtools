@@ -1,0 +1,10 @@
+{
+  "case_id": "case2_return_by_ref_lifetime",
+  "has_contract_break": true,
+  "expected_affected_functions": [
+    "process_user",
+    "get_formatted_username"
+  ],
+  "minimum_severity": "high",
+  "notes": "Returning reference to local stack temporary creates dangling reference in caller"
+}

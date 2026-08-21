@@ -1,0 +1,10 @@
+{
+  "case_id": "case1_default_param_change",
+  "has_contract_break": true,
+  "expected_affected_functions": [
+    "connect_socket",
+    "get_connection_timeout_ms"
+  ],
+  "minimum_severity": "medium",
+  "notes": "Default timeout changed from 5000ms to 0ms breaking caller assumption"
+}

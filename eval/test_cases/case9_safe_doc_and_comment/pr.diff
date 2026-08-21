@@ -1,0 +1,8 @@
+--- a/src/logger.cpp
++++ b/src/logger.cpp
+@@ -3,3 +3,4 @@
++// Logs status messages to standard stdout
+ void log_status(const char* msg) {
+-    std::cout << "[STATUS] " << msg << std::endl;
++    std::cout << "[STATUS] " << msg << std::endl; // preserved behavior
+ }

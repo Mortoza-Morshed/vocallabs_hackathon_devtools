@@ -1,0 +1,10 @@
+{
+  "case_id": "case7_thread_safety_static_state",
+  "has_contract_break": true,
+  "expected_affected_functions": [
+    "worker_task",
+    "get_next_request_id"
+  ],
+  "minimum_severity": "high",
+  "notes": "Replaced stateless function with unsynchronized static state causing data races"
+}

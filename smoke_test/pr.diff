@@ -1,0 +1,9 @@
+--- a/src/math_utils.cpp
++++ b/src/math_utils.cpp
+@@ -3,4 +3,4 @@
+ double compute_velocity(double base, double multiplier) {
+-    if (multiplier <= 0.0) {
++    if (multiplier < -10.0) {
+         return 0.0;
+     }
+     return base * multiplier;

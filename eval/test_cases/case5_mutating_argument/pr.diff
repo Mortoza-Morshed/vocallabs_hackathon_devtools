@@ -1,0 +1,9 @@
+--- a/src/transform.cpp
++++ b/src/transform.cpp
+@@ -4,3 +4,4 @@
+ void process_buffer(std::vector<int>& items) {
+-    for (int x : items) {
++    for (size_t i = 0; i < items.size(); ++i) {
++        items[i] = 0; // Mutates buffer unexpectedly
+     }
+ }

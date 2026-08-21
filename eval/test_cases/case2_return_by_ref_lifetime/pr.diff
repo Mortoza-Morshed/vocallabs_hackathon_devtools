@@ -1,0 +1,9 @@
+--- a/src/user_manager.cpp
++++ b/src/user_manager.cpp
+@@ -4,3 +4,4 @@
+-std::string get_formatted_username(int id) {
+-    return "User_" + std::to_string(id);
++const std::string& get_formatted_username(int id) {
++    std::string temp = "User_" + std::to_string(id);
++    return temp;
+ }
