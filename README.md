@@ -123,13 +123,18 @@ python cli/blast_radius.py analyze <repo-path> <pr-diff-file> --token-budget 800
 Configure API keys in your environment (Blast Radius automatically selects available keys):
 
 ```bash
+# Nvidia / Nemotron 3.5
+export NVIDIA_API_KEY="nvapi-..."
+# or
+export NEMOTRON_API_KEY="nvapi-..."
+
 # Anthropic Claude
 export ANTHROPIC_API_KEY="sk-ant-..."
 
-# Or Google Gemini
+# Google Gemini
 export GEMINI_API_KEY="AIzaSy..."
 
-# Or OpenAI
+# OpenAI
 export OPENAI_API_KEY="sk-..."
 ```
 

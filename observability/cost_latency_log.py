@@ -24,6 +24,9 @@ MODEL_PRICING = {
     "gemini-1.5-flash": (0.000075, 0.0003),
     "gemini/gemini-1.5-pro-latest": (0.00125, 0.005),
     "gemini/gemini-1.5-flash-latest": (0.000075, 0.0003),
+    "nemotron": (0.001, 0.003),
+    "nemotron-4-340b-instruct": (0.001, 0.003),
+    "nvidia": (0.001, 0.003),
 }
 
 DEFAULT_LOG_FILE = "observability/logs.jsonl"

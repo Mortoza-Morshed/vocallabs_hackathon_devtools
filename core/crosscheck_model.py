@@ -21,6 +21,8 @@ import time
 import re
 from dataclasses import dataclass
 from typing import List, Dict, Any, Optional
+from dotenv import load_dotenv
+load_dotenv()
 
 SYSTEM_PROMPT = """You are an independent peer reviewer software auditor tool called Blast Radius Crosschecker.
 Your job is to independently evaluate a list of predicted downstream risks produced by a primary risk model for a C++ Pull Request.
@@ -93,12 +95,23 @@ def run_crosscheck_model(
 
     start_time = time.time()
 
+    nv_key = os.environ.get("NVIDIA_NIM_API_KEY") or os.environ.get("NVIDIA_API_KEY") or os.environ.get("NEMOTRON_API_KEY")
+
     target_model = model_name
+    kwargs = {}
+
     if target_model.startswith("claude-") and not os.environ.get("ANTHROPIC_API_KEY"):
-        if os.environ.get("GEMINI_API_KEY"):
-            target_model = "gemini/gemini-1.5-flash-latest"
+        if nv_key:
+            target_model = "openai/meta/llama-3.3-70b-instruct"
+            kwargs["api_base"] = "https://integrate.api.nvidia.com/v1"
+            kwargs["api_key"] = nv_key
+        elif os.environ.get("GEMINI_API_KEY"):
+            target_model = "gemini/gemini-2.5-flash"
         elif os.environ.get("OPENAI_API_KEY"):
             target_model = "gpt-4o-mini"
+    elif nv_key and not os.environ.get("ANTHROPIC_API_KEY"):
+        kwargs["api_base"] = "https://integrate.api.nvidia.com/v1"
+        kwargs["api_key"] = nv_key
 
     import litellm
     litellm.drop_params = True
@@ -110,7 +123,8 @@ def run_crosscheck_model(
             {"role": "user", "content": user_prompt}
         ],
         temperature=temperature,
-        response_format={"type": "json_object"} if "gpt-" in target_model or "gemini" in target_model else None
+        response_format={"type": "json_object"} if ("gpt-" in target_model or "gemini" in target_model) else None,
+        **kwargs
     )
 
     latency = time.time() - start_time
@@ -160,7 +174,7 @@ if __name__ == "__main__":
         }
     ]
 
-    api_available = any(k in os.environ for k in ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "OPENAI_API_KEY"))
+    api_available = any(k in os.environ for k in ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "OPENAI_API_KEY", "NVIDIA_API_KEY", "NEMOTRON_API_KEY"))
     if api_available:
         try:
             res = run_crosscheck_model(test_context, sample_risks)
@@ -169,5 +183,5 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"[!] API Call Exception (Will be handled by core/degrade): {e}")
     else:
-        print("[!] No LLM API key detected in env (ANTHROPIC_API_KEY / GEMINI_API_KEY / OPENAI_API_KEY).")
+        print("[!] No LLM API key detected in env (ANTHROPIC_API_KEY / GEMINI_API_KEY / OPENAI_API_KEY / NVIDIA_API_KEY / NEMOTRON_API_KEY).")
         print("[+] core/crosscheck_model.py verified structurally.")

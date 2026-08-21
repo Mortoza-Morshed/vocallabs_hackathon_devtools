@@ -1,0 +1,22 @@
+# Git ignore rules for Blast Radius
+
+# Local Developer Notes & Scratch Files
+DEVELOPER_NOTES.txt
+NOTES.txt
+scratch/
+scratch_test/
+
+# Observability Logs & Local Data
+*.jsonl
+.blast_radius/
+observability/logs.jsonl
+
+# Python Cache & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Environment Secrets
+.env
+.env.local
