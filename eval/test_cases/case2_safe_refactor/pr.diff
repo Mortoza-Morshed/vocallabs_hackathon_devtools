@@ -1,0 +1,7 @@
+diff --git a/src/logger.cpp b/src/logger.cpp
+index 3000000..4000000 100644
+--- a/src/logger.cpp
++++ b/src/logger.cpp
+@@ -5,3 +5,3 @@ void log_message(const char* msg) {
+-    // Legacy logger
++    // Optimized logger comment

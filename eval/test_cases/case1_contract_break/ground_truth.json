@@ -1,0 +1,10 @@
+{
+  "has_regression": true,
+  "expected_risks": [
+    {
+      "affected_function": "apply_invoice_discount",
+      "severity": "high",
+      "reasoning": "compute_rate returns -1.0 on discount_factor 0.0, causing total - (-1.0) = total + 1.0 unexpected increase."
+    }
+  ]
+}

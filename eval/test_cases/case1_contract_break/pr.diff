@@ -1,0 +1,8 @@
+diff --git a/src/calculator.cpp b/src/calculator.cpp
+index 1000000..2000000 100644
+--- a/src/calculator.cpp
++++ b/src/calculator.cpp
+@@ -5,4 +5,5 @@ double compute_rate(double amount, double discount_factor) {
++    if (discount_factor <= 0) return -1.0; // Changed behavior: returns -1.0 error code on non-positive input
+     return amount * discount_factor;
+ }
