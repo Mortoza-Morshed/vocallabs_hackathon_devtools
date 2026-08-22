@@ -1,0 +1,7 @@
+{
+  "case_id": "case9_safe_doc_and_comment",
+  "has_contract_break": false,
+  "expected_affected_functions": [],
+  "minimum_severity": "low",
+  "notes": "Safe comment and documentation addition"
+}

@@ -1,0 +1,8 @@
+--- a/src/counter.cpp
++++ b/src/counter.cpp
+@@ -3,3 +3,4 @@
+ int get_next_request_id(int base) {
+-    return base + 1;
++    static int counter = 0;
++    return ++counter;
+ }

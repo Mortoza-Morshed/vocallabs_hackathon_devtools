@@ -1,0 +1,10 @@
+{
+  "case_id": "case10_integer_truncation",
+  "has_contract_break": true,
+  "expected_affected_functions": [
+    "calculate_elapsed",
+    "get_timestamp_us"
+  ],
+  "minimum_severity": "high",
+  "notes": "Return type truncated from 64-bit to 32-bit integer causing timestamp wrap-around"
+}

@@ -1,0 +1,10 @@
+{
+  "case_id": "case4_changed_exception_type",
+  "has_contract_break": true,
+  "expected_affected_functions": [
+    "dispatch_event",
+    "validate_payload"
+  ],
+  "minimum_severity": "medium",
+  "notes": "Exception type changed from std::invalid_argument to std::runtime_error escaping catch block"
+}

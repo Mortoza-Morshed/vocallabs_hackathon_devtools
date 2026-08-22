@@ -14,6 +14,7 @@ from typing import List, Dict, Any
 
 from dotenv import load_dotenv
 load_dotenv()
+os.environ["LITELLM_LOCAL_MODEL_COST_MAP"] = "True"
 
 # Ensure project root is in sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))

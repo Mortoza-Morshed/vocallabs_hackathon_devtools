@@ -1,0 +1,10 @@
+{
+  "case_id": "case5_mutating_argument",
+  "has_contract_break": true,
+  "expected_affected_functions": [
+    "pipeline_stage",
+    "process_buffer"
+  ],
+  "minimum_severity": "high",
+  "notes": "Function now mutates input vector in-place violating caller immutability expectations"
+}

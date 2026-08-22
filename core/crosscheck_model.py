@@ -102,39 +102,58 @@ def run_crosscheck_model(
     kwargs = {}
 
     if target_model.startswith("claude-") and not os.environ.get("ANTHROPIC_API_KEY"):
-        if nv_key:
+        if os.environ.get("GEMINI_API_KEY"):
+            target_model = "gemini/gemini-2.5-flash"
+        elif nv_key:
             target_model = "openai/meta/llama-3.3-70b-instruct"
             kwargs["api_base"] = "https://integrate.api.nvidia.com/v1"
             kwargs["api_key"] = nv_key
-        elif os.environ.get("GEMINI_API_KEY"):
-            target_model = "gemini/gemini-2.5-flash"
         elif os.environ.get("OPENAI_API_KEY"):
             target_model = "gpt-4o-mini"
-    elif nv_key and not os.environ.get("ANTHROPIC_API_KEY"):
+    elif nv_key and not os.environ.get("ANTHROPIC_API_KEY") and not target_model.startswith("gemini"):
         kwargs["api_base"] = "https://integrate.api.nvidia.com/v1"
         kwargs["api_key"] = nv_key
 
     if target_model != model_name:
         print(f"[!] Requested model '{model_name}' unavailable (missing provider key); fell back to '{target_model}'", file=sys.stderr)
 
-    import litellm
-    litellm.drop_params = True
+    if target_model.startswith("gemini") and os.environ.get("GEMINI_API_KEY"):
+        import google.generativeai as genai
+        genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+        clean_model = target_model.replace("gemini/", "")
+        if not clean_model.startswith("models/"):
+            clean_model = f"models/{clean_model}"
+        g_model = genai.GenerativeModel(model_name=clean_model, system_instruction=SYSTEM_PROMPT)
+        res = g_model.generate_content(user_prompt)
+        content = res.text
+        latency = time.time() - start_time
+        meta = getattr(res, "usage_metadata", None)
+        prompt_tokens = getattr(meta, "prompt_token_count", len(user_prompt) // 4) if meta else len(user_prompt) // 4
+        completion_tokens = getattr(meta, "candidates_token_count", len(content) // 4) if meta else len(content) // 4
+    else:
+        import litellm
+        litellm.drop_params = True
+        litellm.telemetry = False
+        litellm.suppress_debug_info = True
+        os.environ["LITELLM_LOCAL_MODEL_COST_MAP"] = "True"
+        kwargs["request_timeout"] = 60
 
-    response = litellm.completion(
-        model=target_model,
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": user_prompt}
-        ],
-        temperature=temperature,
-        response_format={"type": "json_object"} if ("gpt-" in target_model or "gemini" in target_model) else None,
-        **kwargs
-    )
+        response = litellm.completion(
+            model=target_model,
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": user_prompt}
+            ],
+            temperature=temperature,
+            **kwargs
+        )
+        latency = time.time() - start_time
+        content = response.choices[0].message.content
+        usage = getattr(response, "usage", None)
+        prompt_tokens = usage.prompt_tokens if usage else len(user_prompt) // 4
+        completion_tokens = usage.completion_tokens if usage else len(content) // 4
 
-    latency = time.time() - start_time
-    content = response.choices[0].message.content
     cleaned = clean_json_response(content)
-
     parsed = json.loads(cleaned)
 
     checks = []
@@ -151,10 +170,6 @@ def run_crosscheck_model(
                         note=note
                     )
                 )
-
-    usage = getattr(response, "usage", None)
-    prompt_tokens = usage.prompt_tokens if usage else len(user_prompt) // 4
-    completion_tokens = usage.completion_tokens if usage else len(content) // 4
 
     return {
         "checks": [c.to_dict() for c in checks],

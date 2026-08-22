@@ -1,0 +1,8 @@
+--- a/src/validator.cpp
++++ b/src/validator.cpp
+@@ -5,3 +5,3 @@
+     if (size <= 0) {
+-        throw std::invalid_argument("Size must be positive");
++        throw std::runtime_error("Size must be positive");
+     }
+ }

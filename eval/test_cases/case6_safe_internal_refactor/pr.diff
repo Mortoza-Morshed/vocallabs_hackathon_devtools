@@ -1,0 +1,9 @@
+--- a/src/math_ops.cpp
++++ b/src/math_ops.cpp
+@@ -3,4 +3,2 @@
+ int compute_square_sum(int a, int b) {
+-    int val1 = a * a;
+-    int val2 = b * b;
+-    return val1 + val2;
++    return (a * a) + (b * b);
+ }

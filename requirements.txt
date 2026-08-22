@@ -4,6 +4,7 @@ litellm
 anthropic
 openai
 tiktoken
+google-generativeai
 python-dotenv
 streamlit
 requests

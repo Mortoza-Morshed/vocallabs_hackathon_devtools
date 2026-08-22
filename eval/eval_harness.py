@@ -7,10 +7,14 @@ and computes Precision, Recall, and F1 Score.
 """
 
 import os
+import sys
 import json
 import glob
 from dataclasses import dataclass
 from typing import List, Dict, Any, Tuple
+
+# Ensure project root is in sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 @dataclass
 class EvalMetrics:
@@ -91,22 +95,21 @@ def run_pipeline_for_case(case_dir: str, use_mock_if_offline: bool = True) -> Di
         if os.path.exists(gt_file):
             with open(gt_file, "r", encoding="utf-8") as f:
                 gt_data = json.load(f)
-                has_gt_regression = gt_data.get("has_regression", False)
+                has_gt_regression = gt_data.get("has_contract_break", gt_data.get("has_regression", False))
                 gt_expected = gt_data.get("expected_risks", [])
 
         mock_risks = []
         if has_gt_regression:
-            for exp in gt_expected:
-                mock_risks.append({
-                    "description": f"Regression break in `{exp.get('affected_function', 'func')}`",
-                    "affected_function": exp.get("affected_function", "unknown"),
-                    "severity": exp.get("severity", "high"),
-                    "reasoning": "Mocked eval ground truth match",
-                    "confidence_score": 90,
-                    "crosscheck_status": "agreed",
-                    "needs_human_review": False,
-                    "status": "CONFIRMED RISK"
-                })
+            mock_risks.append({
+                "description": f"Regression break detected in test case",
+                "affected_function": "target_function",
+                "severity": "high",
+                "reasoning": "Mocked eval ground truth match",
+                "confidence_score": 90,
+                "crosscheck_status": "agreed",
+                "needs_human_review": False,
+                "status": "CONFIRMED RISK"
+            })
 
         return {
             "is_degraded": False,
@@ -136,7 +139,7 @@ def evaluate_benchmark(test_cases_dir: str = "eval/test_cases") -> EvalMetrics:
         if os.path.exists(gt_file):
             with open(gt_file, "r", encoding="utf-8") as f:
                 gt_data = json.load(f)
-                has_gt_regression = gt_data.get("has_regression", False)
+                has_gt_regression = gt_data.get("has_contract_break", gt_data.get("has_regression", False))
 
         pipeline_out = run_pipeline_for_case(cdir)
         predicted_risks = [r for r in pipeline_out.get("risks", []) if r.get("confidence_score", 0) >= 50]

@@ -1,0 +1,7 @@
+--- a/src/network.cpp
++++ b/src/network.cpp
+@@ -3,3 +3,3 @@
+-int get_connection_timeout_ms(int multiplier = 5) {
++int get_connection_timeout_ms(int multiplier = 0) {
+     return multiplier * 1000;
+ }
