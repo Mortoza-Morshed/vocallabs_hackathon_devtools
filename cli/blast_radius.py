@@ -124,9 +124,9 @@ def run_analyze(args):
 
     def llm_execution_pipeline():
         # Check API Keys
-        api_available = any(k in os.environ for k in ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "OPENAI_API_KEY", "NVIDIA_API_KEY", "NEMOTRON_API_KEY"))
+        api_available = any(k in os.environ for k in ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "OPENAI_API_KEY", "NVIDIA_API_KEY", "NEMOTRON_API_KEY", "NVIDIA_NIM_API_KEY"))
         if not api_available:
-            raise RuntimeError("No LLM API key configured (set ANTHROPIC_API_KEY, GEMINI_API_KEY, OPENAI_API_KEY, NVIDIA_API_KEY, or NEMOTRON_API_KEY)")
+            raise RuntimeError("No LLM API key configured (set ANTHROPIC_API_KEY, GEMINI_API_KEY, OPENAI_API_KEY, NVIDIA_API_KEY, NEMOTRON_API_KEY, or NVIDIA_NIM_API_KEY)")
 
         r_out = run_risk_model(bundle.formatted_context, model_name=args.risk_model)
         r_log = log_model_call(

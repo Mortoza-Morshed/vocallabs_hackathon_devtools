@@ -17,6 +17,7 @@ Returns STRICT JSON matching:
 """
 
 import os
+import sys
 import json
 import time
 import re
@@ -114,6 +115,9 @@ def run_risk_model(
         kwargs["api_base"] = "https://integrate.api.nvidia.com/v1"
         kwargs["api_key"] = nv_key
 
+    if target_model != model_name:
+        print(f"[!] Requested model '{model_name}' unavailable (missing provider key); fell back to '{target_model}'", file=sys.stderr)
+
     if target_model.startswith("gemini") and os.environ.get("GEMINI_API_KEY"):
         import google.generativeai as genai
         genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
@@ -203,7 +207,7 @@ void connect_client() {
 ```
 """
     # Check if API key is present for live run test
-    api_available = any(k in os.environ for k in ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "OPENAI_API_KEY", "NVIDIA_API_KEY", "NEMOTRON_API_KEY"))
+    api_available = any(k in os.environ for k in ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "OPENAI_API_KEY", "NVIDIA_API_KEY", "NEMOTRON_API_KEY", "NVIDIA_NIM_API_KEY"))
     if api_available:
         try:
             res = run_risk_model(test_context)
@@ -212,5 +216,5 @@ void connect_client() {
         except Exception as e:
             print(f"[!] API Call Exception (Will be handled by core/degrade): {e}")
     else:
-        print("[!] No LLM API key detected in env (ANTHROPIC_API_KEY / GEMINI_API_KEY / OPENAI_API_KEY / NVIDIA_API_KEY / NEMOTRON_API_KEY).")
+        print("[!] No LLM API key detected in env (ANTHROPIC_API_KEY / GEMINI_API_KEY / OPENAI_API_KEY / NVIDIA_API_KEY / NEMOTRON_API_KEY / NVIDIA_NIM_API_KEY).")
         print("[+] core/risk_model.py verified structurally.")
