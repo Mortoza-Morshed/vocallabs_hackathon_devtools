@@ -3,6 +3,7 @@
 # Local Developer Notes & Scratch Files
 DEVELOPER_NOTES.txt
 NOTES.txt
+NOTES.TXT
 scratch/
 scratch_test/
 
@@ -16,6 +17,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 .pytest_cache/
+
+# Virtual Environments
+.venv/
+venv/
 
 # Environment Secrets
 .env
