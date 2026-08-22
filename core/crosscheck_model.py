@@ -16,6 +16,7 @@ Returns STRICT JSON matching:
 """
 
 import os
+import sys
 import json
 import time
 import re
@@ -113,6 +114,9 @@ def run_crosscheck_model(
         kwargs["api_base"] = "https://integrate.api.nvidia.com/v1"
         kwargs["api_key"] = nv_key
 
+    if target_model != model_name:
+        print(f"[!] Requested model '{model_name}' unavailable (missing provider key); fell back to '{target_model}'", file=sys.stderr)
+
     import litellm
     litellm.drop_params = True
 
@@ -174,7 +178,7 @@ if __name__ == "__main__":
         }
     ]
 
-    api_available = any(k in os.environ for k in ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "OPENAI_API_KEY", "NVIDIA_API_KEY", "NEMOTRON_API_KEY"))
+    api_available = any(k in os.environ for k in ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "OPENAI_API_KEY", "NVIDIA_API_KEY", "NEMOTRON_API_KEY", "NVIDIA_NIM_API_KEY"))
     if api_available:
         try:
             res = run_crosscheck_model(test_context, sample_risks)
@@ -183,5 +187,5 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"[!] API Call Exception (Will be handled by core/degrade): {e}")
     else:
-        print("[!] No LLM API key detected in env (ANTHROPIC_API_KEY / GEMINI_API_KEY / OPENAI_API_KEY / NVIDIA_API_KEY / NEMOTRON_API_KEY).")
+        print("[!] No LLM API key detected in env (ANTHROPIC_API_KEY / GEMINI_API_KEY / OPENAI_API_KEY / NVIDIA_API_KEY / NEMOTRON_API_KEY / NVIDIA_NIM_API_KEY).")
         print("[+] core/crosscheck_model.py verified structurally.")

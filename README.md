@@ -116,6 +116,13 @@ Runs the full pipeline end-to-end and renders a formatted terminal report:
 python cli/blast_radius.py analyze <repo-path> <pr-diff-file> --token-budget 8000 --confidence-threshold 50
 ```
 
+### 11. Web UI (`ui/app.py`)
+Streamlit app that analyzes a GitHub pull request from its URL: fetches the PR diff via the GitHub API, shallow-clones the head commit (cached per-PR under `.blast_radius/ui_clones/`), and renders the risk report with confidence scores, crosscheck audits, and observability metrics.
+```bash
+streamlit run ui/app.py
+```
+Works without API keys in degraded mode; set a key in `.env` for full semantic analysis. Optional `GITHUB_TOKEN` raises API rate limits.
+
 ---
 
 ## 🔑 Environment Setup & API Configuration

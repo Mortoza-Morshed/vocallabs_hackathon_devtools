@@ -65,7 +65,7 @@ def run_pipeline_for_case(case_dir: str, use_mock_if_offline: bool = True) -> Di
     bundle = build_context_bundle(changed_funcs, cg_slices, diff_text, token_budget=8000)
 
     # Check for live LLM API keys
-    api_available = any(k in os.environ for k in ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "OPENAI_API_KEY"))
+    api_available = any(k in os.environ for k in ("ANTHROPIC_API_KEY", "GEMINI_API_KEY", "OPENAI_API_KEY", "NVIDIA_API_KEY", "NEMOTRON_API_KEY", "NVIDIA_NIM_API_KEY"))
 
     if api_available and not use_mock_if_offline:
         from core.risk_model import run_risk_model
