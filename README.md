@@ -1,4 +1,4 @@
-# 💥 Blast Radius: C++ PR Semantic Risk Analyzer
+# 💥 Blast Radius: C++ PR Semantic Risk Analyzer 🚀🚀🚀
 
 **Blast Radius** is a developer tool that analyzes C++ GitHub pull requests before merge to predict downstream behavioral breakages. Unlike linters or style bots, Blast Radius is a **semantic risk analyzer**: it extracts exact modified function definitions, constructs a static 2-hop call graph using Tree-Sitter C++, slices a token-bounded context bundle, and employs a dual-LLM architecture (Primary Risk Model + Independent Crosscheck Auditor) with confidence scoring, automatic degraded mode fallback, and full observability logging....
 
