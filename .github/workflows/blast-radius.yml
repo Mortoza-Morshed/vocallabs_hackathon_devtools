@@ -48,6 +48,8 @@ jobs:
           cat report_output.txt
 
       - name: Post PR Comment
+        if: github.event.pull_request.head.repo.fork == false
+        continue-on-error: true
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
